@@ -1,0 +1,2 @@
+
+@inyect(store) @observer
