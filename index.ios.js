@@ -1,53 +1,47 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Image,
 } from 'react-native';
 
-export default class ImgurApp extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
+
+import { Provider as MobXProvider, observer } from 'mobx-react/native';
+
+import { LANDSCAPE, PORTRAIT } from './Constants';
+import Store from './Store';
+
+
+@observer
+class ImgurApp extends Component {
+  onLayout(event){
+    const { width, height } = event.nativeEvent.layout;
+    const orientation = ( width > height ) ? LANDSCAPE : PORTRAIT;
+    Store.changeOrientation(orientation);
+    //Store.updateScreenSize(width, height);
   }
+
+  render(){
+    return (
+        <MobXProvider store={Store}>
+          <View style={styles.container} onLayout={this.onLayout.bind(this)}>
+          
+          </View>
+        </MobXProvider>
+    )
+  }
+  
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+   container : {
+    flex : 1,
+    backgroundColor : 'black',
+   }
 });
+  
+
 
 AppRegistry.registerComponent('ImgurApp', () => ImgurApp);
